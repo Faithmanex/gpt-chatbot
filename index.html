@@ -55,25 +55,19 @@
   }
 </style>
 
-<h1>Chat Page</h1>
-<input type="text" id="apiKey" value="" placeholder="Type your OpenAI API key here...">
-<div id="chatbox"></div>
-<textarea id="userInput" placeholder="Type your message here..."></textarea>
-<br>
-<input id="sendButton" type="button" value="Send">
+
 
     <script src="https://cdn.staticfile.org/jquery/3.6.3/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/markdown-it/13.0.1/markdown-it.min.js"></script>
 </head>
 
 <body>
-<h1>Chat Page</h1>
+    <h1>Chat Page</h1>
 <input type="text" id="apiKey" value="" placeholder="Type your OpenAI API key here...">
 <div id="chatbox"></div>
 <textarea id="userInput" placeholder="Type your message here..."></textarea>
 <br>
 <input id="sendButton" type="button" value="Send">
-
     <script>
         const url = new URL(window.location.href);
         const key = url.searchParams.get('key');
