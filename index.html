@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>GPT Chatbot</title>
+    <title>Echelon Chatbot</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.staticfile.org/jquery/3.6.3/jquery.min.js"></script>
@@ -10,32 +10,44 @@
 </head>
 
 <body>
-    <div class="chatbot-container">
-        <div class="chatbot-header">
-            <h1>OpenAI Chatbot</h1>
-        </div>
-        <div class="chatbot-body">
-            <div class="chatbot-messages"></div>
-            <div class="chatbot-input">
-                <input type="text" id="user-input" placeholder="Type your message here...">
-                <button id="send-button">Send</button>
-            </div>
-        </div>
+    <div class="loader">
+        <span>Echelon Chat Bot</span>
+        <span>Echelon Chat Bot</span>
     </div>
+    <div class="container-1">
 
+    <input type="text" id="apiKey" value="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" placeholder="Type your openai apikey here...">
+    </div>
+    <div id="chatbox">
+    <textarea id="userInput" type="text" placeholder="Type your message here..."></textarea>
+    <input id="sendButton" type="button" value="Send">
+</div>
     <script>
+        const url = new URL(window.location.href);
+        const key = url.searchParams.get('key');
+        if (key) {
+            $("#apiKey").val(key);
+            $("#apiKey").hide();
+        }
+        const chatbox = $("#chatbox");
+        const userInput = $("#userInput");
+        const sendButton = $("#sendButton");
+
         $(document).ready(function() {
-            const chatbotMessages = $(".chatbot-messages");
-            const userInput = $("#user-input");
-            const sendButton = $("#send-button");
+            const messages = [];
 
             sendButton.on("click", () => {
                 const message = userInput.val();
                 if (message) {
-                    chatbotMessages.append(`<div class="chatbot-message user-message"><p>${message}</p></div>`);
+                    messages.push({
+                        "role": "user",
+                        "content": message
+                    });
+                    chatbox.append(`<pre>You: ${message}</pre>`);
                     userInput.val("");
+                    sendButton.val("Sending...");
                     sendButton.prop("disabled", true);
-                    fetchResponse(message);
+                    fetchMessages();
                 }
             });
 
@@ -58,12 +70,12 @@
                 }
             });
 
-            function fetchResponse(message) {
+            function fetchMessages() {
                 try {
-                    const apiKey = "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";
+                    const apiKey = $("#apiKey").val();
 
                     var settings = {
-                        "url": "https://api.openai.com/v1/engines/davinci-codex/completions",
+                        "url": "https://api.openai.com/v1/chat/completions",
                         "method": "POST",
                         "timeout": 0,
                         "headers": {
@@ -71,31 +83,43 @@
                             "Content-Type": "application/json"
                         },
                         "data": JSON.stringify({
-                            "prompt": message,
-                            "max_tokens": 150,
-                            "temperature": 0.5,
-                            "n": 1,
-                            "stop": "\n"
+                            "model": "gpt-3.5-turbo",
+                            "messages": messages
                         }),
                     };
 
                     $.ajax(settings).done(function(response) {
                         console.log(response);
 
-                        const botMessage = response.choices[0].text.trim();
-                        chatbotMessages.append(`<div class="chatbot-message bot-message"><p>${botMessage}</p></div>`);
+                        const message = response.choices[0].message;
+                        messages.push({
+                            "role": message.role,
+                            "content": message.content
+                        });
+
+                        const htmlText = window.markdownit().render(message.content);
+                        chatbox.append(`<Pre>Bot: ${htmlText} </Pre>`);
+                        sendButton.val("Send");
                         sendButton.prop("disabled", false);
 
                     }).fail(function(jqXHR, textStatus, errorThrown) {
-                        chatbotMessages.append(`<div class="chatbot-message bot-message"><p>Oops, something went wrong with the server. Please try again later.</p></div>`);
+                        sendButton.val("Oops, something went wrong");
+                        chatbox.append(`<p>Oops, something went wrong with the server. Please try again later.</p>`);
                     });
 
                 } catch (error) {
-                    chatbotMessages.append(`<div class="chatbot-message bot-message"><p>Oops, something went wrong in JavaScript code. Please try again later.</p></div>`);
+                    sendButton.val("Oops, something went wrong");
+                    chatbox.append(`<p>Oops, something went wrong in JavaScript code. Please try again later.</p>`);
                 }
             }
         });
     </script>
 </body>
+<div id="footer">
+    
+      <p>Built with <a href="https://openai.com/">openai</a>
+
+    </p>
+</div>
 
 </html>
