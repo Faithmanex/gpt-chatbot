@@ -4,119 +4,87 @@
 <head>
     <title>Chat Page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        #chatbox {
+            width: 90%;
+            height: 600px;
+            max-height: 80%;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        
+        #chatbox p {
+            margin: 5px 0;
+            line-height: 1.2;
+        }
+        
+        #userInput {
+            width: 90%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            bottom: 10%;
+        }
+        
+        #sendButton {
+            width: 90%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+        
+        #footer {
+            position: absolute;
+            bottom: 0px;
+            width: 90%;
+            text-align: center;
+            color: grey;
+        }
+        
+        #footer a {
+            color: inherit;
+        }
+        
+        @media only screen and (max-width: 600px) {
+            #chatbox {
+                height: 400px;
+            }
+            #userInput {
+                width: 100%;
+                bottom: 20%;
+                position: fixed;
+            }
+            #sendButton {
+                width: 100%;
+                bottom: 15%;
+                position: fixed;
+            }
+        }
+    </style>
     <script src="https://cdn.staticfile.org/jquery/3.6.3/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/markdown-it/13.0.1/markdown-it.min.js"></script>
-    <style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
-  }
-  
-  h1 {
-    display: inline-block;
-    font-size: 24px;
-    font-weight: bold;
-    margin: 20px 0 10px 10px;
-    color: #fff;
-  }
-  
-  input[type="text"], textarea {
-    font-size: 16px;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-  }
-  
-  input[type="text"] {
-    width: 100%;
-    background-color: #f2f2f2;
-    padding: 10px 20px;
-  }
-  
-  #chatbox {
-    max-height: 400px;
-    overflow-y: scroll;
-    margin: 10px;
-  }
-  
-  #chatbox .message {
-    display: inline-block;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    font-size: 16px;
-    max-width: 70%;
-  }
-  
-  #chatbox .message.sent {
-    background-color: #dcf8c6;
-    float: right;
-  }
-  
-  #chatbox .message.received {
-    background-color: #fff;
-    float: left;
-  }
-  
-  #userInput {
-    width: 100%;
-    padding: 10px 20px;
-    border-top: 2px solid #eee;
-    border-bottom: 2px solid #eee;
-    resize: none;
-    font-size: 16px;
-  }
-  
-  #sendButton {
-    font-size: 16px;
-    font-weight: bold;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 10px;
-    float: right;
-  }
-  
-  #sendButton:hover {
-    background-color: #3e8e41;
-  }
-</style>
-
-<h1>Chat Page</h1>
-<input type="text" id="apiKey" value="" placeholder="Type your OpenAI API key here...">
-<div id="chatbox">
-  <div class="message received">Hi there!</div>
-  <div class="message sent">Hey! How can I help you today?</div>
-  <div class="message received">I need some assistance with my account.</div>
-  <div class="message received">Can you help me reset my password?</div>
-  <div class="message sent">Sure thing! Let me look up your account.</div>
-  <div class="message sent">What's your email address?</div>
-</div>
-<textarea id="userInput" placeholder="Type your message here..."></textarea>
-<input id="sendButton" type="button" value="Send">
-
-
 </head>
 
 <body>
-
-<h1>Chat Page</h1>
-<input type="text" id="apiKey" value="" placeholder="Type your OpenAI API key here...">
-<div id="chatbox">
-  <div class="message received">Hi there!</div>
-  <div class="message sent">Hey! How can I help you today?</div>
-  <div class="message received">I need some assistance with my account.</div>
-  <div class="message received">Can you help me reset my password?</div>
-  <div class="message sent">Sure thing! Let me look up your account.</div>
-  <div class="message sent">What's your email address?</div>
-</div>
-<textarea id="userInput" placeholder="Type your message here..."></textarea>
-<input id="sendButton" type="button" value="Send">
+    <h1 style="display: inline-block;">Chat Page</h1>
+    &nbsp; <input type="text" id="apiKey" value="" style="width: 390px;" placeholder="Type your openai apikey here...">
+    <div id="chatbox"></div>
+    <textarea id="userInput" type="text" placeholder="Type your message here..."></textarea>
+    <br/>
+    <input id="sendButton" type="button" value="Send">
 
     <script>
         const url = new URL(window.location.href);
@@ -139,20 +107,7 @@
                         "role": "user",
                         "content": message
                     });
-                    chatbox.append(`                  
-                    <button type="button" class="btn">
-  <strong>Q: ${message}</strong>
-  <div id="container-stars">
-    <div id="stars"></div>
-  </div>
-
-  <div id="glow">
-    <div class="circle"></div>
-    <div class="circle"></div>
-  </div>
-</button>
-
-                    `);
+                    chatbox.append(`<pre>Q: ${message}</pre>`);
                     userInput.val("");
                     sendButton.val("Sending...");
                     sendButton.prop("disabled", true);
