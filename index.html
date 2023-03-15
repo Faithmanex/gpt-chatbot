@@ -1,197 +1,358 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 
 <head>
-    <title>Chat Page</title>
+    <title>Chat Buddy</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
             font-family: Arial, sans-serif;
-            height: 500px;
+            width: 100%;
+            overflow: hidden;
         }
-        
+
+        body {
+            background: #f00;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(315deg, #03a9f4, #ff0058);
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(315deg, #03a9f4, #ff0058);
+            filter: blur(30px);
+        }
+
+        body b {
+            position: absolute;
+            inset: 6px;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 2;
+        }
+
+        .heading {
+            position: relative;
+            left: 10px;
+            top: 10px;
+        }
+
+        .heading span {
+            position: absolute;
+            color: #fff;
+            font-size: 38px;
+            letter-spacing: 5px;
+        }
+
+        .heading span:nth-child(1) {
+            color: transparent;
+            -webkit-text-stroke: 0.3px rgb(128, 198, 255);
+        }
+
+        .heading span:nth-child(2) {
+            color: rgb(128, 198, 255);
+            -webkit-text-stroke: 1px rgb(128, 198, 255);
+            animation: uiverse723 3s ease-in-out infinite;
+        }
+
+        @keyframes uiverse723 {
+
+            0%,
+            100% {
+                clip-path: polygon(0% 45%, 15% 44%, 32% 50%,
+                        54% 60%, 70% 61%, 84% 59%, 100% 52%, 100% 100%, 0% 100%);
+            }
+
+            50% {
+                clip-path: polygon(0% 60%, 16% 65%, 34% 66%,
+                        51% 62%, 67% 50%, 84% 45%, 100% 46%, 100% 100%, 0% 100%);
+            }
+        }
+
         .hidden {
             display: none;
         }
-        
+
         #chatbox {
-            width: 90%;
-            height: 600px;
-            max-height: 80%;
+            width: 100%;
+
+            max-height: auto;
             overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
             margin-bottom: 10px;
             padding: 10px;
-            box-sizing: border-box;
+
         }
-        
+
         #chatbox p {
             margin: 5px 0;
-            line-height: 1.2;
+            line-height: 1.2em;
+            user-select: auto;
+            cursor: default;
         }
-        
+
         #userInput {
-            width: 90%;
-            padding: 10px;
+            width: 80%;
+            padding-left: 10px;
+            margin-left: 10%;
             border: 1px solid #ccc;
             box-sizing: border-box;
-            bottom: 10%;
+            position: absolute;
+            border-radius: 10px;
+            bottom: 70px;
+            border: 2px dotted #8707ff;
+            padding: 10px 25px;
+            background: whitesmoke;
         }
-        
+
+        #userInput:active {
+            box-shadow: 2px 2px 15px #8707ff inset;
+        }
+
+        #userInput::placeholder {
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
         #sendButton {
-            width: 90%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
+            width: 80%;
+            margin-left: 10%;
+            height: 40px;
+            border: 3px solid #315cfd;
+            border-radius: 10px;
+            transition: all 0.3s;
             cursor: pointer;
-            box-sizing: border-box;
+            background: white;
+            font-size: 1.2em;
+            font-weight: 550;
+            font-family: 'Montserrat', sans-serif;
+            position: absolute;
+            bottom: 20px;
         }
-        
+
+        #sendButton:hover {
+            background: #315cfd;
+            color: white;
+            font-size: 1.5em;
+        }
+
         #footer {
             position: absolute;
             bottom: 0px;
-            width: 90%;
+            width: 100%;
             text-align: center;
             color: grey;
         }
-        
+
         #footer a {
             color: inherit;
         }
-        
+
 
         .btn {
-  --border-color: linear-gradient(-45deg, #ffae00, #7e03aa, #00fffb);
-  --border-width: .125em;
-  --curve-size: .5em;
-  --blur: 30px;
-  --bg: #080312;
-  --color: #afffff;
-  color: var(--color);
-    /* use position: relative; so that BG is only for .btn */
-  position: relative;
-  isolation: isolate;
-  display: inline-grid;
-  place-content: center;
-  padding: .5em 1.5em;
-  font-size: 17px;
-  border: 0;
-  text-transform: uppercase;
-  box-shadow: 10px 10px 20px rgba(0, 0, 0, .6);
-  clip-path: polygon(
-            /* Top-left */
-            0% var(--curve-size),
+            --border-color: linear-gradient(-45deg, #ffae00, #7e03aa, #00fffb);
+            --border-width: .125em;
+            --curve-size: .5em;
+            --blur: 30px;
+            --bg: #080312;
+            --color: #afffff;
+            color: var(--color);
+            /* use position: relative; so that BG is only for .btn */
+            position: relative;
+            isolation: isolate;
+            display: inline-grid;
+            place-content: center;
+            padding: .5em 1.5em;
+            font-size: 17px;
+            border: 0;
+            text-transform: uppercase;
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, .6);
+            clip-path: polygon(
+                    /* Top-left */
+                    0% var(--curve-size),
 
-            var(--curve-size) 0,
-            /* top-right */
-            100% 0,
-            100% calc(100% - var(--curve-size)),
+                    var(--curve-size) 0,
+                    /* top-right */
+                    100% 0,
+                    100% calc(100% - var(--curve-size)),
 
-            /* bottom-right 1 */
-            calc(100% - var(--curve-size)) 100%,
-            /* bottom-right 2 */
-            0 100%);
-  transition: color 250ms;
-}
+                    /* bottom-right 1 */
+                    calc(100% - var(--curve-size)) 100%,
+                    /* bottom-right 2 */
+                    0 100%);
+            transition: color 250ms;
+        }
 
-.btn::after,
-.btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-}
+        .btn::after,
+        .btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+        }
 
-.btn::before {
-  background: var(--border-color);
-  background-size: 300% 300%;
-  animation: move-bg7234 5s ease infinite;
-  z-index: -2;
-}
+        .btn::before {
+            background: var(--border-color);
+            background-size: 300% 300%;
+            animation: move-bg7234 5s ease infinite;
+            z-index: -2;
+        }
 
-@keyframes move-bg7234 {
-  0% {
-    background-position: 31% 0%
-  }
+        @keyframes move-bg7234 {
+            0% {
+                background-position: 31% 0%
+            }
 
-  50% {
-    background-position: 70% 100%
-  }
+            50% {
+                background-position: 70% 100%
+            }
 
-  100% {
-    background-position: 31% 0%
-  }
-}
+            100% {
+                background-position: 31% 0%
+            }
+        }
 
-.btn::after {
-  background: var(--bg);
-  z-index: -1;
-  clip-path: polygon(
-            /* Top-left */
-            var(--border-width) 
-            calc(var(--curve-size) + var(--border-width) * .5),
+        .btn::after {
+            background: var(--bg);
+            z-index: -1;
+            clip-path: polygon(
+                    /* Top-left */
+                    var(--border-width) calc(var(--curve-size) + var(--border-width) * .5),
 
-            calc(var(--curve-size) + var(--border-width) * .5) var(--border-width),
+                    calc(var(--curve-size) + var(--border-width) * .5) var(--border-width),
 
-            /* top-right */
-            calc(100% - var(--border-width)) 
-            var(--border-width),
+                    /* top-right */
+                    calc(100% - var(--border-width)) var(--border-width),
 
-            calc(100% - var(--border-width)) 
-            calc(100% - calc(var(--curve-size) + var(--border-width) * .5)),
+                    calc(100% - var(--border-width)) calc(100% - calc(var(--curve-size) + var(--border-width) * .5)),
 
-            /* bottom-right 1 */
-            calc(100% - calc(var(--curve-size) + var(--border-width) * .5)) calc(100% - var(--border-width)),
-            /* bottom-right 2 */
-            var(--border-width) calc(100% - var(--border-width)));
-  transition: clip-path 500ms;
-}
+                    /* bottom-right 1 */
+                    calc(100% - calc(var(--curve-size) + var(--border-width) * .5)) calc(100% - var(--border-width)),
+                    /* bottom-right 2 */
+                    var(--border-width) calc(100% - var(--border-width)));
+            transition: clip-path 500ms;
+        }
 
-.btn:where(:hover, :focus)::after {
-  clip-path: polygon(
-                /* Top-left */
-                calc(100% - var(--border-width)) 
+        .btn:where(:hover, :focus)::after {
+            clip-path: polygon(
+                    /* Top-left */
+                    calc(100% - var(--border-width)) calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)),
 
-                calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)),
-    
-                calc(100% - var(--border-width))
+                    calc(100% - var(--border-width)) var(--border-width),
 
-                var(--border-width),
-    
-                /* top-right */
-                calc(100% - var(--border-width))
+                    /* top-right */
+                    calc(100% - var(--border-width)) var(--border-width),
 
-                 var(--border-width),
-    
-                calc(100% - var(--border-width)) 
+                    calc(100% - var(--border-width)) calc(100% - calc(var(--curve-size) + var(--border-width) * .5)),
 
-                calc(100% - calc(var(--curve-size) + var(--border-width) * .5)),
-    
-                /* bottom-right 1 */
-                calc(100% - calc(var(--curve-size) + var(--border-width) * .5)) 
-                calc(100% - var(--border-width)),
+                    /* bottom-right 1 */
+                    calc(100% - calc(var(--curve-size) + var(--border-width) * .5)) calc(100% - var(--border-width)),
 
-                /* bottom-right 2 */
-                calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5))
-                calc(100% - var(--border-width)));
-  transition: 200ms;
-}
+                    /* bottom-right 2 */
+                    calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)) calc(100% - var(--border-width)));
+            transition: 200ms;
+        }
 
-.btn:where(:hover, :focus) {
-  color: #fff;
-}
+        .btn:where(:hover, :focus) {
+            color: #fff;
+        }
+
+        .loader {
+            width: 3em;
+            height: 3em;
+            font-size: 10px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loader .face {
+            position: absolute;
+            border-radius: 50%;
+            border-style: solid;
+            animation: animate023845 3s linear infinite;
+        }
+
+        .loader .face:nth-child(1) {
+            width: 100%;
+            height: 100%;
+            color: gold;
+            border-color: currentColor transparent transparent currentColor;
+            border-width: 0.2em 0.2em 0em 0em;
+            --deg: -45deg;
+            animation-direction: normal;
+        }
+
+        .loader .face:nth-child(2) {
+            width: 70%;
+            height: 70%;
+            color: lime;
+            border-color: currentColor currentColor transparent transparent;
+            border-width: 0.2em 0em 0em 0.2em;
+            --deg: -135deg;
+            animation-direction: reverse;
+        }
+
+        .loader .face .circle {
+            position: absolute;
+            width: 50%;
+            height: 0.1em;
+            top: 50%;
+            left: 50%;
+            background-color: transparent;
+            transform: rotate(var(--deg));
+            transform-origin: left;
+        }
+
+        .loader .face .circle::before {
+            position: absolute;
+            top: -0.5em;
+            right: -0.5em;
+            content: '';
+            width: 1em;
+            height: 1em;
+            background-color: currentColor;
+            border-radius: 50%;
+            box-shadow: 0 0 2em,
+                0 0 4em,
+                0 0 6em,
+                0 0 8em,
+                0 0 10em,
+                0 0 0 0.5em rgba(255, 255, 0, 0.1);
+        }
+
+        @keyframes animate023845 {
+            to {
+                transform: rotate(1turn);
+            }
+        }
+
         @media only screen and (max-width: 600px) {
             #chatbox {
                 height: 400px;
             }
+
             #userInput {
-                width: 100%;
-                bottom: 20%;
-                position: fixed;
+                width: 95%;
+                margin-left: 2.5%;
+                position: absolute;
             }
+
             #sendButton {
-                width: 100%;
-                bottom: 15%;
-                position: fixed;
+                width: 95%;
+                margin-left: 2.5%;
+                position: absolute;
             }
         }
     </style>
@@ -199,119 +360,129 @@
     <script src="https://cdn.staticfile.org/markdown-it/13.0.1/markdown-it.min.js"></script>
 </head>
 
-<body>
-    <h1 style="display: inline-block;">Chat Page</h1>
-    &nbsp; <input type="text" id="apiKey" value="" style="width: 390px;" placeholder="Type your openai apikey here...">
-    <div id="chatbox"></div>
-    <textarea id="userInput" type="text" placeholder="Type your message here..."></textarea>
-    <br/>
-    <input id="sendButton" type="button" value="Send">
+<body><b>
+        <div class="heading">
+            <span>ChatBuddy</span>
+            <span>ChatBuddy</span>
+        </div><br><br><br>
+        &nbsp; <input style="visibility: hidden;" type="password" id="apiKey"
+            value="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" style="width: 390px;"
+            placeholder="Type your openai apikey here...">
+        <div style="margin-left: auto; margin-right: auto;" class="loader">
+            <div class="face">
+                <div class="circle"></div>
+            </div>
+            <div class="face">
+                <div class="circle"></div>
+            </div>
+        </div>
+        <div id="chatbox"></div>
+        <textarea id="userInput" type="text" placeholder="Type your message here..."></textarea>
+        <br>
+        <input id="sendButton" type="button" value="Send">
 
-    <script>
-        const url = new URL(window.location.href);
-        const key = url.searchParams.get('key');
-        if (key) {
-            $("#apiKey").val(key);
-            $("#apiKey").hide();
-        }
-        const chatbox = $("#chatbox");
-        const userInput = $("#userInput");
-        const sendButton = $("#sendButton");
+        <script>
+            const url = new URL(window.location.href);
+            const key = url.searchParams.get('key');
+            if (key) {
+                $("#apiKey").val(key);
+                $("#apiKey").hide();
+            }
+            const chatbox = $("#chatbox");
+            const userInput = $("#userInput");
+            const sendButton = $("#sendButton");
 
-        $(document).ready(function() {
-            const messages = [];
+            $(document).ready(function () {
+                const messages = [];
 
-            sendButton.on("click", () => {
-                const message = userInput.val();
-                if (message) {
-                    messages.push({
-                        "role": "user",
-                        "content": message
-                    });
-                    chatbox.append(`<button style="display: block; margin-left: auto" class="btn">
-                        Q: ${message}
-</button>`);
-                    userInput.val("");
-                    sendButton.val("Sending...");
-                    sendButton.prop("disabled", true);
-                    fetchMessages();
-                }
-            });
-
-            userInput.on("keydown", (event) => {
-                if (event.keyCode === 13 && !event.ctrlKey && !event.shiftKey) { // Enter key without Ctrl key
-                    event.preventDefault();
-                    sendButton.click();
-                } else if (event.keyCode === 13 && (event.ctrlKey || event.shiftKey)) { // Enter key with Ctrl key
-                    event.preventDefault();
-                    const cursorPosition = userInput.prop("selectionStart");
-                    const currentValue = userInput.val();
-                    userInput.val(
-                        currentValue.slice(0, cursorPosition) +
-                        "\n" +
-                        currentValue.slice(cursorPosition)
-                    );
-                    // Set the cursor position after the new line character
-                    userInput.prop("selectionStart", cursorPosition + 1);
-                    userInput.prop("selectionEnd", cursorPosition + 1);
-                }
-            });
-
-            function fetchMessages() {
-                try {
-                    const apiKey = $("#apiKey").val();
-
-                    var settings = {
-                        "url": "https://api.openai.com/v1/chat/completions",
-                        "method": "POST",
-                        "timeout": 0,
-                        "headers": {
-                            "Authorization": "Bearer " + apiKey,
-                            "Content-Type": "application/json"
-                        },
-                        "data": JSON.stringify({
-                            "model": "gpt-3.5-turbo",
-                            "messages": messages
-                        }),
-                    };
-
-                    $.ajax(settings).done(function(response) {
-                        console.log(response);
-
-                        const message = response.choices[0].message;
+                sendButton.on("click", () => {
+                    const message = userInput.val();
+                    if (message) {
                         messages.push({
-                            "role": message.role,
-                            "content": message.content
+                            "role": "user",
+                            "content": message
+                        });
+                        chatbox.append(
+                            `<br><h3 style="margin-left: auto; text-align: right" class="btn"> Q: ${message} </h3>`
+                        );
+                        userInput.val("");
+                        sendButton.val("Typing");
+                        sendButton.prop("disabled", true);
+                        fetchMessages();
+                    }
+                });
+
+                userInput.on("keydown", (event) => {
+                    if (event.keyCode === 13 && !event.ctrlKey && !event
+                        .shiftKey) { // Enter key without Ctrl key
+                        event.preventDefault();
+                        sendButton.click();
+                    } else if (event.keyCode === 13 && (event.ctrlKey || event
+                            .shiftKey)) { // Enter key with Ctrl key
+                        event.preventDefault();
+                        const cursorPosition = userInput.prop("selectionStart");
+                        const currentValue = userInput.val();
+                        userInput.val(
+                            currentValue.slice(0, cursorPosition) +
+                            "\n" +
+                            currentValue.slice(cursorPosition)
+                        );
+                        // Set the cursor position after the new line character
+                        userInput.prop("selectionStart", cursorPosition + 1);
+                        userInput.prop("selectionEnd", cursorPosition + 1);
+                    }
+                });
+
+                function fetchMessages() {
+                    try {
+                        const apiKey = $("#apiKey").val();
+
+                        var settings = {
+                            "url": "https://api.openai.com/v1/chat/completions",
+                            "method": "POST",
+                            "timeout": 0,
+                            "headers": {
+                                "Authorization": "Bearer " + apiKey,
+                                "Content-Type": "application/json"
+                            },
+                            "data": JSON.stringify({
+                                "model": "gpt-3.5-turbo",
+                                "messages": messages
+                            }),
+                        };
+
+                        $.ajax(settings).done(function (response) {
+                            console.log(response);
+
+                            const message = response.choices[0].message;
+                            messages.push({
+                                "role": message.role,
+                                "content": message.content
+                            });
+
+                            const htmlText = window.markdownit().render(message.content);
+                            chatbox.append(
+                                `<br><h4 font-family: inherit; padding: 10px; font-size: 50px; margin-left: auto" class="btn">${htmlText}</h4>`
+                            );
+                            sendButton.val("Send");
+                            sendButton.prop("disabled", false);
+
+                        }).fail(function (jqXHR, textStatus, errorThrown) {
+                            sendButton.val("Oops, something went wrong");
+                            chatbox.append(
+                                `<p>Oops, something went wrong with the server. Please try again later.</p>`
+                            );
                         });
 
-                        const htmlText = window.markdownit().render(message.content);
-                        chatbox.append(`<button style="display: block;" class="btn">
-                            ${htmlText}</button>`);
-                        sendButton.val("Send");
-                        sendButton.prop("disabled", false);
-
-                    }).fail(function(jqXHR, textStatus, errorThrown) {
+                    } catch (error) {
                         sendButton.val("Oops, something went wrong");
-                        chatbox.append(`<p>Oops, something went wrong with the server. Please try again later.</p>`);
-                    });
-
-                } catch (error) {
-                    sendButton.val("Oops, something went wrong");
-                    chatbox.append(`<p>Oops, something went wrong in JavaScript code. Please try again later.</p>`);
+                        chatbox.append(
+                            `<p>Oops, something went wrong in JavaScript code. Please try again later.</p>`);
+                    }
                 }
-            }
-        });
-    </script>
+            });
+        </script>
+    </b>
 </body>
-<div id="footer">
-    <a href="https://github.com/JiChao99/GPT3.5-H5-lite-page">
-            View on github<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
-                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
-            </svg>
-        </a>
-    <p>Copyright © <a href="https://jichao.top">Alec.Ji</a>, Inc. Built with <a href="https://openai.com/">openai</a>
-
-    </p>
-</div>
 
 </html>
